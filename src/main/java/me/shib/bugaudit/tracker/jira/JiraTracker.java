@@ -17,7 +17,7 @@ public class JiraTracker extends BATracker {
 
     @Override
     protected BugAuditContent.Type getContentType() {
-        return null;
+        return BugAuditContent.Type.Jira;
     }
 
     @Override
