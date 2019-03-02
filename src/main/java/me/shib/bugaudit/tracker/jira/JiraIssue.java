@@ -1,7 +1,10 @@
 package me.shib.bugaudit.tracker.jira;
 
 import me.shib.bugaudit.commons.BugAuditContent;
-import me.shib.bugaudit.tracker.*;
+import me.shib.bugaudit.tracker.BatComment;
+import me.shib.bugaudit.tracker.BatIssue;
+import me.shib.bugaudit.tracker.BatPriority;
+import me.shib.bugaudit.tracker.BatUser;
 import me.shib.java.lib.jiraclient.Comment;
 import me.shib.java.lib.jiraclient.Issue;
 import me.shib.java.lib.jiraclient.JiraException;
@@ -12,10 +15,10 @@ import java.util.List;
 
 public class JiraIssue extends BatIssue {
 
-    private transient BatConfig config;
     private transient Issue issue;
+    private transient JiraTracker tracker;
 
-    protected JiraIssue(BATracker tracker, BatConfig config, Issue issue) {
+    protected JiraIssue(JiraTracker tracker, Issue issue) {
         super(tracker);
     }
 
@@ -26,6 +29,14 @@ public class JiraIssue extends BatIssue {
         } catch (JiraException e) {
             e.printStackTrace();
         }
+    }
+
+    Issue getIssue() {
+        return issue;
+    }
+
+    void setIssue(Issue issue) {
+        this.issue = issue;
     }
 
     @Override
@@ -50,7 +61,7 @@ public class JiraIssue extends BatIssue {
 
     @Override
     protected BatPriority getPriority() {
-        return new JiraPriority(issue.getPriority(), config);
+        return new JiraPriority(issue.getPriority(), tracker);
     }
 
     @Override
