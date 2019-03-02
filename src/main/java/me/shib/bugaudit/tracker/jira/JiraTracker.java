@@ -74,39 +74,60 @@ public final class JiraTracker extends BATracker {
         }
     }
 
+    private boolean transitionIssue(Issue issue, String status) throws JiraException {
+        List<Transition> transitions = issue.getTransitions();
+        for (Transition transition : transitions) {
+            if (transition.getToStatus().getName().equalsIgnoreCase(status)) {
+                issue.transition().execute(transition.getName());
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     protected BatIssue updateIssue(BatIssue batIssue, BatIssueFactory updater) {
         JiraIssue jiraIssue = (JiraIssue) batIssue;
+        boolean fluentUpdatable = false;
         try {
             Issue issue = jiraIssue.getIssue();
             Issue.FluentUpdate fluentUpdate = issue.update();
             if (null != updater.getIssueType()) {
                 fluentUpdate.field(Field.ISSUE_TYPE, updater.getIssueType());
+                fluentUpdatable = true;
             }
             if (null != updater.getTitle()) {
                 fluentUpdate.field(Field.SUMMARY, updater.getTitle());
+                fluentUpdatable = true;
             }
             if (null != updater.getDescription()) {
-                fluentUpdate.field(Field.DESCRIPTION, updater.getDescription());
+                fluentUpdate.field(Field.DESCRIPTION, updater.getDescription().getJiraContent());
+                fluentUpdatable = true;
             }
             if (null != updater.getAssignee()) {
                 fluentUpdate.field(Field.ASSIGNEE, updater.getAssignee());
+                fluentUpdatable = true;
             }
             if (null != updater.getStatus()) {
-                fluentUpdate.field(Field.STATUS, updater.getStatus());
+                transitionIssue(issue, updater.getStatus());
             }
             if (null != updater.getPriority()) {
                 fluentUpdate.field(Field.PRIORITY, getPriorityName(updater.getPriority()));
+                fluentUpdatable = true;
             }
             if (updater.getLabels().size() > 0) {
                 fluentUpdate.field(Field.LABELS, updater.getLabels());
+                fluentUpdatable = true;
             }
             if (null != updater.getCustomFields()) {
                 for (String key : updater.getCustomFields().keySet()) {
                     fluentUpdate.field(key, updater.getCustomFields().get(key));
+                    fluentUpdatable = true;
                 }
             }
-            fluentUpdate.execute();
+            if (fluentUpdatable) {
+                fluentUpdate.execute();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -20,6 +20,8 @@ public class JiraIssue extends BatIssue {
 
     protected JiraIssue(JiraTracker tracker, Issue issue) {
         super(tracker);
+        this.tracker = tracker;
+        this.issue = issue;
     }
 
     @Override
