@@ -1,17 +1,17 @@
 package me.shib.bugaudit.tracker.jira;
 
 import me.shib.bugaudit.commons.BugAuditContent;
-import me.shib.bugaudit.tracker.BATracker;
 import me.shib.bugaudit.tracker.BatIssue;
 import me.shib.bugaudit.tracker.BatIssueFactory;
 import me.shib.bugaudit.tracker.BatSearchQuery;
+import me.shib.bugaudit.tracker.BugAuditTracker;
 import me.shib.java.lib.jiraclient.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public final class JiraTracker extends BATracker {
+public final class JiraTracker extends BugAuditTracker {
 
     private JiraClient client;
 
@@ -42,7 +42,7 @@ public final class JiraTracker extends BATracker {
     }
 
     @Override
-    protected BatIssue createIssue(BatIssueFactory creator) {
+    public BatIssue createIssue(BatIssueFactory creator) {
         try {
             Issue.FluentCreate fluentCreate = client.createIssue(creator.getProject(), creator.getIssueType());
             fluentCreate.field(Field.SUMMARY, creator.getTitle());
@@ -86,7 +86,7 @@ public final class JiraTracker extends BATracker {
     }
 
     @Override
-    protected BatIssue updateIssue(BatIssue batIssue, BatIssueFactory updater) {
+    public BatIssue updateIssue(BatIssue batIssue, BatIssueFactory updater) {
         JiraIssue jiraIssue = (JiraIssue) batIssue;
         boolean fluentUpdatable = false;
         try {
@@ -135,7 +135,7 @@ public final class JiraTracker extends BATracker {
     }
 
     @Override
-    protected List<BatIssue> searchBatIssues(String projectKey, BatSearchQuery query, int count) {
+    public List<BatIssue> searchBatIssues(String projectKey, BatSearchQuery query, int count) {
         List<BatIssue> batIssues = new ArrayList<>();
         StringBuilder jql = new StringBuilder();
         jql.append("project = ").append(projectKey);

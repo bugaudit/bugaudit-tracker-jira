@@ -25,7 +25,7 @@ public class JiraIssue extends BatIssue {
     }
 
     @Override
-    protected void refresh() {
+    public void refresh() {
         try {
             issue.refresh();
         } catch (JiraException e) {
@@ -42,27 +42,27 @@ public class JiraIssue extends BatIssue {
     }
 
     @Override
-    protected String getKey() {
+    public String getKey() {
         return issue.getKey();
     }
 
     @Override
-    protected String getTitle() {
+    public String getTitle() {
         return issue.getSummary();
     }
 
     @Override
-    protected String getDescription() {
+    public String getDescription() {
         return issue.getDescription();
     }
 
     @Override
-    protected String getStatus() {
+    public String getStatus() {
         return issue.getStatus().getName();
     }
 
     @Override
-    protected BatPriority getPriority() {
+    public BatPriority getPriority() {
         return new JiraPriority(issue.getPriority(), tracker);
     }
 
@@ -86,12 +86,12 @@ public class JiraIssue extends BatIssue {
     }
 
     @Override
-    protected List<String> getLabels() {
+    public List<String> getLabels() {
         return issue.getLabels();
     }
 
     @Override
-    protected List<BatComment> getComments() {
+    public List<BatComment> getComments() {
         List<BatComment> comments = new ArrayList<>();
         for (Comment comment : issue.getComments()) {
             comments.add(new JiraComment(comment));
@@ -100,7 +100,7 @@ public class JiraIssue extends BatIssue {
     }
 
     @Override
-    protected BatComment addComment(BugAuditContent comment) {
+    public BatComment addComment(BugAuditContent comment) {
         try {
             return new JiraComment(issue.addComment(comment.getJiraContent()));
         } catch (JiraException e) {
