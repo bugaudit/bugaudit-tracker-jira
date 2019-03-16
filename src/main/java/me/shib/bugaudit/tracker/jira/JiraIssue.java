@@ -47,6 +47,11 @@ public class JiraIssue extends BatIssue {
     }
 
     @Override
+    public String getProjectKey() {
+        return issue.getProject().getKey();
+    }
+
+    @Override
     public String getTitle() {
         return issue.getSummary();
     }
@@ -54,6 +59,11 @@ public class JiraIssue extends BatIssue {
     @Override
     public String getDescription() {
         return issue.getDescription();
+    }
+
+    @Override
+    public String getType() {
+        return issue.getIssueType().getName();
     }
 
     @Override
