@@ -134,34 +134,41 @@ public final class JiraTracker extends BugAuditTracker {
         return jiraIssue;
     }
 
-    @Override
-    public List<BatIssue> searchBatIssues(String projectKey, BatSearchQuery query, int count) {
-        List<BatIssue> batIssues = new ArrayList<>();
+    private String getJqlForBatQuery(String projectKey, BatSearchQuery query) {
         StringBuilder jql = new StringBuilder();
         jql.append("project = ").append(projectKey);
         for (BatSearchQuery.BatQueryItem queryItem : query.getQueryItems()) {
-            for (String value : queryItem.getValues()) {
-                jql.append(" AND ");
-                switch (queryItem.getCondition()) {
-                    case status:
-                        jql.append("status");
-                        break;
-                    case label:
-                        jql.append("labels");
-                        break;
-                    case type:
-                        jql.append("issuetype");
-                }
-                if (queryItem.getOperator() == BatSearchQuery.Operator.equals) {
-                    jql.append(" = ");
-                } else if (queryItem.getOperator() == BatSearchQuery.Operator.not) {
-                    jql.append(" != ");
-                }
-                jql.append("\"").append(value).append("\"");
+            jql.append(" AND ");
+            switch (queryItem.getCondition()) {
+                case status:
+                    jql.append("status");
+                    break;
+                case label:
+                    jql.append("labels");
+                    break;
+                case type:
+                    jql.append("issuetype");
             }
+            if (queryItem.getOperator() == BatSearchQuery.Operator.matching) {
+                jql.append(" in ");
+            } else if (queryItem.getOperator() == BatSearchQuery.Operator.not_matching) {
+                jql.append(" not in ");
+            }
+            jql.append("(");
+            jql.append("\"").append(queryItem.getValues().get(0)).append("\"");
+            for (int i = 1; i < queryItem.getValues().size(); i++) {
+                jql.append(", ").append("\"").append(queryItem.getValues().get(i)).append("\"");
+            }
+            jql.append(")");
         }
+        return jql.toString();
+    }
+
+    @Override
+    public List<BatIssue> searchBatIssues(String projectKey, BatSearchQuery query, int count) {
+        List<BatIssue> batIssues = new ArrayList<>();
         try {
-            List<Issue> issues = client.searchIssues(jql.toString()).issues;
+            List<Issue> issues = client.searchIssues(getJqlForBatQuery(projectKey, query)).issues;
             for (Issue issue : issues) {
                 batIssues.add(new JiraIssue(this, issue));
             }
