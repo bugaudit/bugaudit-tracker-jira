@@ -11,6 +11,7 @@ import me.shib.java.lib.jiraclient.JiraException;
 import me.shib.java.lib.jiraclient.User;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class JiraIssue extends BatIssue {
@@ -77,6 +78,21 @@ public class JiraIssue extends BatIssue {
     }
 
     @Override
+    public Date getCreatedDate() {
+        return issue.getCreatedDate();
+    }
+
+    @Override
+    public Date getUpdatedDate() {
+        return issue.getUpdatedDate();
+    }
+
+    @Override
+    public Date getDueDate() {
+        return issue.getDueDate();
+    }
+
+    @Override
     protected BatUser getReporter() {
         return new JiraUser(issue.getReporter());
     }
@@ -98,6 +114,11 @@ public class JiraIssue extends BatIssue {
     @Override
     public List<String> getLabels() {
         return issue.getLabels();
+    }
+
+    @Override
+    public Object getCustomField(String identifier) {
+        return issue.getField(identifier);
     }
 
     @Override

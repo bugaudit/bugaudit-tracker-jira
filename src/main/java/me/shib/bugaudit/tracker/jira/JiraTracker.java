@@ -177,4 +177,8 @@ public final class JiraTracker extends BugAuditTracker {
         }
         return batIssues;
     }
+
+    JiraClient getClient() {
+        return client;
+    }
 }

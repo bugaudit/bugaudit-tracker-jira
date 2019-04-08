@@ -19,7 +19,12 @@ public class JiraComment implements BatComment {
     }
 
     @Override
-    public Date getUpdated() {
+    public Date getCreatedDate() {
+        return comment.getCreatedDate();
+    }
+
+    @Override
+    public Date getUpdatedDate() {
         return comment.getUpdatedDate();
     }
 }
