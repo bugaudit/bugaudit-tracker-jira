@@ -1,16 +1,5 @@
 # BugAudit Tracker - Jira
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/me.shib.java.lib/bugaudit-tracker-jira/badge.svg)](https://maven-badges.herokuapp.com/maven-central/me.shib.java.lib/bugaudit-tracker-jira)
-[![Download](https://api.bintray.com/packages/shibme/maven/bugaudit-tracker-jira/images/download.svg)](https://bintray.com/shibme/maven/bugaudit-tracker-jira/_latestVersion)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/me.shib.bugaudit/bugaudit-tracker-jira/badge.svg)](https://maven-badges.herokuapp.com/maven-central/me.shib.bugaudit/bugaudit-tracker-jira)
+[![Build Status](https://gitlab.com/bugaudit/bugaudit-tracker-jira/badges/master/pipeline.svg)](https://gitlab.com/bugaudit/bugaudit-tracker-jira/pipelines)
 
 BugAudit Tracker Module for Jira
-
-### Maven Dependency
-Add to your `pom.xml`
-```xml
-<dependency>
-	<groupId>me.shib.bugaudit</groupId>
-	<artifactId>bugaudit-tracker-jira</artifactId>
-	<version>0.0.1</version>
-</dependency>
-```
-
