@@ -1,6 +1,7 @@
 package me.shib.bugaudit.tracker.jira;
 
 import me.shib.bugaudit.commons.BugAuditContent;
+import me.shib.bugaudit.commons.BugAuditException;
 import me.shib.bugaudit.tracker.BatIssue;
 import me.shib.bugaudit.tracker.BatIssueFactory;
 import me.shib.bugaudit.tracker.BatSearchQuery;
@@ -15,13 +16,14 @@ public final class JiraTracker extends BugAuditTracker {
 
     private JiraClient client;
 
-    public JiraTracker(Connection connection, Map<String, Integer> priorityMap) {
+    public JiraTracker(Connection connection, Map<String, Integer> priorityMap) throws BugAuditException {
         super(connection, priorityMap);
         BasicCredentials credentials = new BasicCredentials(connection.getUsername(), connection.getPassword());
         try {
             this.client = new JiraClient(connection.getEndpoint(), credentials);
         } catch (JiraException e) {
             e.printStackTrace();
+            throw new BugAuditException(e.getMessage());
         }
     }
 
@@ -42,7 +44,7 @@ public final class JiraTracker extends BugAuditTracker {
     }
 
     @Override
-    public BatIssue createIssue(BatIssueFactory creator) {
+    public BatIssue createIssue(BatIssueFactory creator) throws BugAuditException {
         try {
             Issue.FluentCreate fluentCreate = client.createIssue(creator.getProject(), creator.getIssueType());
             fluentCreate.field(Field.SUMMARY, creator.getTitle());
@@ -74,7 +76,7 @@ public final class JiraTracker extends BugAuditTracker {
             return new JiraIssue(this, issue);
         } catch (JiraException e) {
             e.printStackTrace();
-            return null;
+            throw new BugAuditException(e.getMessage());
         }
     }
 
@@ -90,7 +92,7 @@ public final class JiraTracker extends BugAuditTracker {
     }
 
     @Override
-    public BatIssue updateIssue(BatIssue batIssue, BatIssueFactory updater) {
+    public BatIssue updateIssue(BatIssue batIssue, BatIssueFactory updater) throws BugAuditException {
         JiraIssue jiraIssue = (JiraIssue) batIssue;
         boolean fluentUpdatable = false;
         try {
@@ -134,6 +136,7 @@ public final class JiraTracker extends BugAuditTracker {
             }
         } catch (Exception e) {
             e.printStackTrace();
+            throw new BugAuditException(e.getMessage());
         }
         return jiraIssue;
     }
@@ -169,7 +172,7 @@ public final class JiraTracker extends BugAuditTracker {
     }
 
     @Override
-    public List<BatIssue> searchBatIssues(String projectKey, BatSearchQuery query, int count) {
+    public List<BatIssue> searchBatIssues(String projectKey, BatSearchQuery query, int count) throws BugAuditException {
         List<BatIssue> batIssues = new ArrayList<>();
         try {
             List<Issue> issues = client.searchIssues(getJqlForBatQuery(projectKey, query)).issues;
@@ -178,6 +181,7 @@ public final class JiraTracker extends BugAuditTracker {
             }
         } catch (JiraException e) {
             e.printStackTrace();
+            throw new BugAuditException(e.getMessage());
         }
         return batIssues;
     }

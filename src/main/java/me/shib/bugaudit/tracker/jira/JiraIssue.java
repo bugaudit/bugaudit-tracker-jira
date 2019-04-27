@@ -1,6 +1,7 @@
 package me.shib.bugaudit.tracker.jira;
 
 import me.shib.bugaudit.commons.BugAuditContent;
+import me.shib.bugaudit.commons.BugAuditException;
 import me.shib.bugaudit.tracker.BatComment;
 import me.shib.bugaudit.tracker.BatIssue;
 import me.shib.bugaudit.tracker.BatPriority;
@@ -26,11 +27,12 @@ public class JiraIssue extends BatIssue {
     }
 
     @Override
-    public void refresh() {
+    public void refresh() throws BugAuditException {
         try {
             issue.refresh();
         } catch (JiraException e) {
             e.printStackTrace();
+            throw new BugAuditException(e.getMessage());
         }
     }
 
@@ -131,12 +133,12 @@ public class JiraIssue extends BatIssue {
     }
 
     @Override
-    public BatComment addComment(BugAuditContent comment) {
+    public BatComment addComment(BugAuditContent comment) throws BugAuditException {
         try {
             return new JiraComment(issue.addComment(comment.getJiraContent()));
         } catch (JiraException e) {
             e.printStackTrace();
-            return null;
+            throw new BugAuditException(e.getMessage());
         }
     }
 }
