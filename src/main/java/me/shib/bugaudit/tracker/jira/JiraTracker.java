@@ -58,7 +58,11 @@ public final class JiraTracker extends BugAuditTracker {
             }
             if (creator.getCustomFields() != null) {
                 for (String key : creator.getCustomFields().keySet()) {
-                    fluentCreate.field(key, Field.valueById(creator.getCustomFields().get(key)));
+                    try {
+                        fluentCreate.field(key, Field.valueById((String) creator.getCustomFields().get(key)));
+                    } catch (Exception e) {
+                        fluentCreate.field(key, creator.getCustomFields().get(key));
+                    }
                 }
             }
             Issue issue = fluentCreate.execute();
