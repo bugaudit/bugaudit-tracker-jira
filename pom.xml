@@ -5,7 +5,7 @@
 
     <groupId>me.shib.bugaudit</groupId>
     <artifactId>bugaudit-tracker-jira</artifactId>
-    <version>0.0.1</version>
+    <version>0.1</version>
     <name>BugAudit Tracker - Jira</name>
     <description>BugAudit Tracker Module for Jira</description>
     <url>https://github.com/${project.owner.id}/${project.artifactId}</url>
@@ -177,7 +177,7 @@
         <dependency>
             <groupId>me.shib.bugaudit</groupId>
             <artifactId>bugaudit-tracker</artifactId>
-            <version>0.0.1</version>
+            <version>0.1</version>
         </dependency>
         <dependency>
             <groupId>me.shib.java.lib</groupId>
