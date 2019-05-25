@@ -95,17 +95,17 @@ public class JiraIssue extends BatIssue {
     }
 
     @Override
-    protected BatUser getReporter() {
+    public BatUser getReporter() {
         return new JiraUser(issue.getReporter());
     }
 
     @Override
-    protected BatUser getAssignee() {
+    public BatUser getAssignee() {
         return new JiraUser(issue.getAssignee());
     }
 
     @Override
-    protected List<BatUser> getSubscribers() {
+    public List<BatUser> getSubscribers() {
         List<BatUser> subscribers = new ArrayList<>();
         for (User user : issue.getWatches().getWatchers()) {
             subscribers.add(new JiraUser(user));
