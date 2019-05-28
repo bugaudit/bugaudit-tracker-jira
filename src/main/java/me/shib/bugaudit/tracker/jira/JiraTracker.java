@@ -172,7 +172,7 @@ public final class JiraTracker extends BugAuditTracker {
     }
 
     @Override
-    public List<BatIssue> searchBatIssues(String projectKey, BatSearchQuery query, int count) throws BugAuditException {
+    public List<BatIssue> searchBatIssues(String projectKey, BatSearchQuery query) throws BugAuditException {
         List<BatIssue> batIssues = new ArrayList<>();
         try {
             List<Issue> issues = client.searchIssues(getJqlForBatQuery(projectKey, query)).issues;
