@@ -75,8 +75,7 @@ public final class JiraTracker extends BugAuditTracker {
             }
             return new JiraIssue(this, issue);
         } catch (JiraException e) {
-            e.printStackTrace();
-            throw new BugAuditException(e.getMessage());
+            throw new BugAuditException(e);
         }
     }
 
@@ -135,8 +134,7 @@ public final class JiraTracker extends BugAuditTracker {
                 fluentUpdate.execute();
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new BugAuditException(e.getMessage());
+            throw new BugAuditException(e);
         }
         return jiraIssue;
     }
@@ -173,17 +171,16 @@ public final class JiraTracker extends BugAuditTracker {
 
     @Override
     public List<BatIssue> searchBatIssues(String projectKey, BatSearchQuery query) throws BugAuditException {
-        List<BatIssue> batIssues = new ArrayList<>();
         try {
+            List<BatIssue> batIssues = new ArrayList<>();
             List<Issue> issues = client.searchIssues(getJqlForBatQuery(projectKey, query)).issues;
             for (Issue issue : issues) {
                 batIssues.add(new JiraIssue(this, issue));
             }
+            return batIssues;
         } catch (JiraException e) {
-            e.printStackTrace();
-            throw new BugAuditException(e.getMessage());
+            throw new BugAuditException(e);
         }
-        return batIssues;
     }
 
     JiraClient getClient() {
